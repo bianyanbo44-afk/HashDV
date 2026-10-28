@@ -1,0 +1,16 @@
+{
+ "n_pairs": 377,
+ "n_bits": 768,
+ "threshold": "< 4",
+ "caught": 0,
+ "median_distance": 234.0,
+ "quantiles": {
+  "10": 159.0,
+  "25": 194.0,
+  "50": 234.0,
+  "75": 283.0,
+  "90": 322.0
+ },
+ "caught_val_images": 0,
+ "n_val_leaked": 157
+}

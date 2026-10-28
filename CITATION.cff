@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Please cite the associated HashDV manuscript when using this software."
+type: software
+title: "HashDV: Exposing hidden copies and measuring accuracy inflation in industrial defect benchmarks"
+version: 0.1.0
+date-released: 2026-10-28
+repository-code: "https://github.com/bianyanbo44-afk/HashDV"
+license: MIT
+authors:
+  - family-names: Bian
+    given-names: Yanbo
+  - family-names: Wang
+    given-names: Zhihai

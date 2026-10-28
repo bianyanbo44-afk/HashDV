@@ -1,0 +1,5 @@
+# Matched candidate-background score calibration
+
+The published SSCD score-normalization check is now available. To separate verifier evidence from query-level score calibration, apply exactly the same fixed beta=1, top-3 background subtraction to HashDV, dense verification, the perceptual hash and SSCD (both preprocessing choices).
+
+Use only the existing retrieved candidates that belong to the original training split, excluding the oracle-added source by split membership. The background candidate set is identical for every score; no positive labels select background rows. Subtract the mean of the three highest background scores (or all available background scores if fewer than three). Do not fit a new fusion weight, tune beta, select neighbours using held-out outcomes, or change the original real-audit sets. Report this secondary matched-calibration comparison alongside the original unnormalized verification results and SSCD's full-background published configuration. This plan is recorded before computing matched-calibration results.

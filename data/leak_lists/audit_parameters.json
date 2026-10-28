@@ -1,0 +1,14 @@
+{
+ "NEU-DET": {
+  "alpha": 0.4,
+  "threshold_tau": 0.3384765625
+ },
+ "GC10-DET": {
+  "alpha": 0.5,
+  "threshold_tau": 0.46875
+ },
+ "DsPCBSD+ (official split)": {
+  "alpha": 0.15,
+  "threshold_tau": 0.3056640625
+ }
+}

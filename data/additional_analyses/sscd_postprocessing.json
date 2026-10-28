@@ -1,0 +1,104 @@
+{
+  "neu_det": {
+    "square320_raw_score_norm": {
+      "tpr1": 0.7958333333333333,
+      "auroc": 0.9702067894572751
+    },
+    "square320_train_centered_score_norm": {
+      "tpr1": 0.7875,
+      "auroc": 0.9641701841059709
+    },
+    "square320_whitened": {
+      "tpr1": 0.6972222222222222,
+      "auroc": 0.9338719412267869
+    },
+    "square320_whitened_score_norm": {
+      "tpr1": 0.7513888888888889,
+      "auroc": 0.9449187991142448
+    },
+    "short288_raw_score_norm": {
+      "tpr1": 0.8125,
+      "auroc": 0.9726683974066879
+    },
+    "short288_train_centered_score_norm": {
+      "tpr1": 0.8055555555555556,
+      "auroc": 0.9680984243470753
+    },
+    "short288_whitened": {
+      "tpr1": 0.7291666666666666,
+      "auroc": 0.9436495231471489
+    },
+    "short288_whitened_score_norm": {
+      "tpr1": 0.7819444444444444,
+      "auroc": 0.9559329807899849
+    }
+  },
+  "gc10_det": {
+    "square320_raw_score_norm": {
+      "tpr1": 0.8228260869565217,
+      "auroc": 0.9774936491606165
+    },
+    "square320_train_centered_score_norm": {
+      "tpr1": 0.8043478260869565,
+      "auroc": 0.9671433046793863
+    },
+    "square320_whitened": {
+      "tpr1": 0.7717391304347826,
+      "auroc": 0.9534935711464667
+    },
+    "square320_whitened_score_norm": {
+      "tpr1": 0.8206521739130435,
+      "auroc": 0.9648802848491645
+    },
+    "short288_raw_score_norm": {
+      "tpr1": 0.85,
+      "auroc": 0.9797950665802009
+    },
+    "short288_train_centered_score_norm": {
+      "tpr1": 0.8271739130434783,
+      "auroc": 0.9679765933171129
+    },
+    "short288_whitened": {
+      "tpr1": 0.7728260869565218,
+      "auroc": 0.9567763212427655
+    },
+    "short288_whitened_score_norm": {
+      "tpr1": 0.8195652173913044,
+      "auroc": 0.966719285585423
+    }
+  },
+  "pcb_det": {
+    "square320_raw_score_norm": {
+      "tpr1": 0.8125,
+      "auroc": 0.9757560581779332
+    },
+    "square320_train_centered_score_norm": {
+      "tpr1": 0.7916666666666666,
+      "auroc": 0.9718869382931883
+    },
+    "square320_whitened": {
+      "tpr1": 0.7277777777777777,
+      "auroc": 0.9416012083980834
+    },
+    "square320_whitened_score_norm": {
+      "tpr1": 0.7569444444444444,
+      "auroc": 0.9483622280497281
+    },
+    "short288_raw_score_norm": {
+      "tpr1": 0.825,
+      "auroc": 0.9802327157795908
+    },
+    "short288_train_centered_score_norm": {
+      "tpr1": 0.8125,
+      "auroc": 0.9771364486208236
+    },
+    "short288_whitened": {
+      "tpr1": 0.75,
+      "auroc": 0.9499964589808338
+    },
+    "short288_whitened_score_norm": {
+      "tpr1": 0.775,
+      "auroc": 0.9561335510554261
+    }
+  }
+}

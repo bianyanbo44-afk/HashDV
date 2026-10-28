@@ -1,0 +1,4 @@
+benchmark,gap_full,gap_leakfree,delta_L
+NEU-DET,0.10463,0.03327,0.07136
+GC10-DET,0.13432,0.13564,-0.00132
+DsPCBSD+,0.02588,0.00270,0.02318

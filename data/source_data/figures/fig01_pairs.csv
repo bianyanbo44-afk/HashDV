@@ -1,0 +1,7 @@
+benchmark,test,train,type,phash_distance,dhash_distance,fused_score
+NEU-DET,test/pitted_surface_171.jpg,train/pitted_surface_292.jpg,same region,8,1,0.6418
+NEU-DET,test/scratches_27.jpg,train/scratches_295.jpg,rotated 90°,32,31,0.3760
+GC10-DET,test/img_06_425502300_01410.jpg,train/img_06_425502300_01403.jpg,shifted,10,0,0.5137
+GC10-DET,test/img_04_425505400_00017.jpg,train/img_04_425505000_00018.jpg,same weld seam,8,0,0.5386
+DsPCBSD+,val/Y_001811.jpg,train/Y_001807.jpg,identical,0,0,0.9942
+DsPCBSD+,val/S_11077723.jpg,train/S_11077721.jpg,shifted,28,33,0.3813

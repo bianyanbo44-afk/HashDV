@@ -1,0 +1,5 @@
+{
+  "neu_det": {"image_root":"datasets/neu_det/images","copy_root":"outputs/neu_det_copies"},
+  "gc10_det": {"image_root":"datasets/gc10_det/images","copy_root":"outputs/gc10_det_copies"},
+  "pcb_det": {"image_root":"datasets/pcb_det/images","copy_root":"outputs/pcb_det_copies"}
+}

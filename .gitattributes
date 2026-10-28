@@ -1,0 +1,2 @@
+# Preserve exact bytes of the released evidence and its SHA256 records across platforms.
+* -text

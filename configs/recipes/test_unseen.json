@@ -1,0 +1,49 @@
+{
+  "seed": 3407,
+  "universe": [
+    "gaussian_noise",
+    "gaussian_blur",
+    "brightness",
+    "contrast",
+    "jpeg"
+  ],
+  "role": "test_unseen",
+  "operator_sets": [
+    [
+      "gaussian_noise",
+      "gaussian_blur",
+      "brightness",
+      "jpeg"
+    ],
+    [
+      "gaussian_noise",
+      "brightness",
+      "jpeg"
+    ],
+    [
+      "gaussian_blur",
+      "brightness"
+    ],
+    [
+      "gaussian_blur",
+      "jpeg"
+    ],
+    [
+      "gaussian_blur",
+      "contrast",
+      "jpeg"
+    ],
+    [
+      "brightness",
+      "contrast"
+    ],
+    [
+      "gaussian_blur",
+      "contrast"
+    ],
+    [
+      "gaussian_noise",
+      "gaussian_blur"
+    ]
+  ]
+}

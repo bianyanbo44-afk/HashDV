@@ -1,0 +1,60 @@
+{
+  "seed": 3407,
+  "deletion_rng_seed": 271030407,
+  "n_train": 1063,
+  "removed_images": [
+    "crazing_155.jpg",
+    "crazing_60.jpg",
+    "inclusion_120.jpg",
+    "inclusion_35.jpg",
+    "inclusion_51.jpg",
+    "inclusion_71.jpg",
+    "inclusion_87.jpg",
+    "patches_294.jpg",
+    "pitted_surface_203.jpg",
+    "pitted_surface_204.jpg",
+    "pitted_surface_282.jpg",
+    "rolled-in_scale_105.jpg",
+    "rolled-in_scale_115.jpg",
+    "rolled-in_scale_135.jpg",
+    "rolled-in_scale_136.jpg",
+    "scratches_131.jpg",
+    "scratches_68.jpg"
+  ],
+  "class_counts": {
+    "patches": 1,
+    "inclusion": 5,
+    "scratches": 2,
+    "pitted_surface": 3,
+    "rolled-in_scale": 4,
+    "crazing": 2
+  },
+  "known_copy_images_retained": [
+    "crazing_201.jpg",
+    "crazing_80.jpg",
+    "inclusion_111.jpg",
+    "inclusion_200.jpg",
+    "inclusion_235.jpg",
+    "inclusion_238.jpg",
+    "inclusion_86.jpg",
+    "patches_80.jpg",
+    "pitted_surface_237.jpg",
+    "pitted_surface_245.jpg",
+    "pitted_surface_292.jpg",
+    "rolled-in_scale_191.jpg",
+    "rolled-in_scale_37.jpg",
+    "rolled-in_scale_39.jpg",
+    "rolled-in_scale_65.jpg",
+    "scratches_118.jpg",
+    "scratches_295.jpg"
+  ],
+  "recipe": {
+    "epochs": 150,
+    "patience": 30,
+    "imgsz": 640,
+    "batch": 8,
+    "workers": 1,
+    "cache": "ram",
+    "checkpoint": "best.pt"
+  }
+}

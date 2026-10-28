@@ -1,0 +1,4 @@
+benchmark,n_leak_pairs,same_group_leak,same_group_random,median_gap_leak,median_gap_random
+NEU-DET,17,1.000,0.166,4,87
+GC10-DET,73,0.795,0.018,8.5,139
+DsPCBSD+,377,0.979,0.476,208,713232
