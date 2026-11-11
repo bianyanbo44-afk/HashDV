@@ -1,9 +1,15 @@
-"""Expected chance flags of the frozen audit and hash-rule coverage of the flagged pairs (Table IV).
+"""Synthetic non-source query exceedances and hash coverage of the frozen matched pairs.
 
-For each benchmark, the per-query false-flag rate is the share of held-out synthetic test queries for which at least
-one non-source candidate reaches the frozen threshold. Multiplied by the number of evaluation images, it gives the
-expected number of images the audit would flag by chance. The script also counts flagged pairs caught by the exact
-rotation-aware pHash rule (identical hashes over the six views) and by a 5-bit tolerance.
+The source-identity labels distinguish the generating source file from other candidate files. The diagnostic counts
+synthetic queries with a non-source candidate at or above the frozen threshold. A non-source file can share a physical
+region with its source, so these labels leave natural-instance identity unresolved.
+
+Multiplying that synthetic rate by an evaluation-set size gives a hypothetical rescaling under the same rate.
+Its interpretation requires matching query and gallery conditions. The released legacy fields
+per_query_false_flag_rate and expected_chance_flags_test_rate retain their names for compatibility.
+The natural audit counts remain operational outputs of the frozen rule.
+
+The script also counts matched pairs satisfying the exact rotation-aware pHash rule and a 5-bit tolerance.
 
 Usage: python experiments/chance_flags.py data [--output data/additional_analyses/chance_flags.json]
 """
