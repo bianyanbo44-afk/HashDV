@@ -1,15 +1,16 @@
 # HashDV
 
-Code and numeric evidence for **Beyond Hash Deduplication: Hidden Matches and Benchmark Sensitivity in Industrial Defect Benchmarks** (ICDE 2027, Experiment, Analysis, and Benchmark category). The map from the paper's figures and tables to the files that reproduce them is [below](#figures-and-tables-of-the-icde-2027-submission).
+Code and numeric evidence for **Beyond Hash Deduplication: Auditing Hidden Overlap in Industrial Defect Benchmarks** (ICDE 2027, Experiment, Analysis, and Benchmark category). The map from the paper's figures and tables to the files that reproduce them is [below](#figures-and-tables-of-the-icde-2027-submission).
 
-HashDV connects two measurements: **which evaluation images have matching training content, and how detector scores respond when that selected content is removed.** It combines rotation-aware perceptual hashing with dense geometric verification, then measures benchmark sensitivity on the unchanged evaluation images.
+HashDV uncovers hidden overlap through **complementary copy detection, acquisition-aware auditing and fixed-test evaluation**. Rotation-aware perceptual hashing and dense geometric verification recover transformed sources. Frozen audits locate matching training content, and retraining measures its evaluation consequences on the original images and annotations.
 
 ## Results and artifacts
 
 - Fusion improves synthetic source-file recovery TPR at 1% non-source pair acceptance by **8.9 percentage points** over the best individual cue per benchmark, on average. The gain is reproduced with fresh synthetic copies and a second backbone.
 - With identical candidate-background calibration, mean source-file recovery TPR is **88.0% for HashDV** and **80.8% for SSCD**.
-- The frozen operational audit flags matches for **4.7%, 12.4%, and 7.7%** of evaluated images in NEU-DET, GC10-DET, and DsPCBSD+. The released pair lists define these operational sets, while instance-level evidence and label sensitivities are provided separately.
-- Three-seed fixed-test retraining gives adjusted selected-content removal responses of **7.1 and 2.3 mAP50 points** on flagged NEU-DET and DsPCBSD+ images. Adjusted pooled responses are **0.14–0.51 points**. These contrasts measure responses of the frozen audit sets; their interpretation as copy-specific effects additionally requires the stated shared-effect assumption.
+- The frozen audit flags matches for **4.7%, 12.4%, and 7.7%** of evaluated images in NEU-DET, GC10-DET, and DsPCBSD+. Pair lists, geometric evidence, acquisition records and label sensitivities make the selected content traceable.
+- Three-seed fixed-test retraining gives adjusted local mAP50 responses of **7.1 and 2.3 points** on flagged NEU-DET and DsPCBSD+ images. Adjusted pooled responses are **0.14–0.51 points**. The paper defines their interpretation conditions and reports equal-size removal and match-evidence sensitivities.
+- GC10-DET retains an approximately **13-point flagged-subset advantage** after match removal, showing why overlap and its evaluation consequences must be measured together.
 
 The repository contains an installable verifier, frozen audit configurations, deterministic copy generation, split preparation, detector training, and the released scores/predictions needed to check the reported comparisons and intervention contrasts on CPU. Original dataset images and pretrained weights stay with their distributors.
 
@@ -30,13 +31,15 @@ Paths are relative to `data/` unless they start with `experiments/` or `configs/
 | Table II | `additional_analyses/baseline_source_data.csv`, `baseline_gain_bootstrap.json`, `matched_calibration.json`, `calibrated_gain_bootstrap.json`, `sscd_results.json`, `sscd_postprocessing.json`, `sift_results.json` |
 | Table III | `additional_analyses/end_to_end_results.json`, `source_data/tables_and_text/l1e_retrieval_recall.json` |
 | Table IV | `leak_lists/`, `additional_analyses/real_pair_geometry.json`; natural-pair notes in `additional_analyses/instance_visual_assessment.json` |
-| Table V | `configs/recipes/` |
-| Table VI, Figs. 6–7 | `source_data/tables_and_text/l1c_results.json`, `l1c_extra.json`, `l1d_results.json`, `intervention_predictions/`, `random_deletion/saved_predictions/` |
+| Table V | `configs/recipes/`, `matched_full_arm/*/training/` |
+| Table VI, Figs. 6–7 | Steel rows: `additional_analyses/{neu_det,gc10_det}_matched_full_arm.json`, `matched_full_arm/` (full arms) and `random_deletion/saved_predictions/b_*`, `intervention_predictions/gc10_det/b_*` (removal arms). PCB rows: `source_data/tables_and_text/l1d_results.json`, `intervention_predictions/pcb_det/`. NEU random control: `random_deletion/saved_predictions/`. Updated figure CSVs: `matched_full_arm/source_data/` |
 | Audit cost (Section V-A) | `additional_analyses/audit_timing.json` (from `experiments/time_audit.py`) |
 
 Files added for this submission sit next to the original evidence, which is unchanged and still checked against `data/SHA256.json`; the additions are listed with their hashes in `data/SHA256_icde2027.json`.
 
 - `data/intervention_predictions/{gc10_det,pcb_det}/{a,b}_<seed>.npz`: matched predictions of the full-split (`a`) and copy-removed (`b`) detectors for seeds 2027, 3407 and 8888, in the layout of `data/random_deletion/saved_predictions/`, with the SHA-256 of each detector's weights. The NEU-DET arms are the `a_*` and `b_*` files in `data/random_deletion/saved_predictions/`. Pooled subset mAP50 recomputed from these files with `verify_control_ap.py` reproduces the flagged-image and benchmark-level contrasts.
+- `data/matched_full_arm/{neu_det,gc10_det}/a_matched_<seed>.npz` (`experiments/matched_full_arm.py`): predictions of the steel full-split detectors retrained with the removal arms' execution settings (one data-loading worker, RAM caching, plots disabled; same data, seeds, pretrained weights and hyperparameters), with each run's arguments, metrics and weight hash in `training/`. The script recomputes the steel rows of Table VI with their image and paired-seed intervals, the NEU match-evidence subgroups, the neighbour control and the subset gaps (`data/additional_analyses/*_matched_full_arm.json`), and reproduces the earlier full-arm values as a check. The earlier steel full arms (zero workers, no cache) remain as `random_deletion/saved_predictions/a_*` and `intervention_predictions/gc10_det/a_*`.
+- `data/additional_analyses/pcb_seed_sensitivity.json` (`experiments/pcb_seed_sensitivity.py`): DsPCBSD+ intervals that resample the paired seeds jointly with the images.
 - `data/additional_analyses/chance_flags.json` (`experiments/chance_flags.py`): non-source query exceedance rates on held-out synthetic queries at the frozen thresholds, a hypothetical rescaling to each evaluation-set size, and flagged pairs satisfying the two pHash rules. These diagnostics and their legacy expected-count field names do not estimate real-query false flags or establish natural-match precision; candidate identity is examined in the label-sensitivity analysis.
 - `data/additional_analyses/audit_timing.json` (`experiments/time_audit.py`): stage-by-stage wall-clock time of the released audit. A rerun's flagged counts can differ from `data/leak_lists/` by a near-tied candidate; the frozen lists remain the sets used in the paper.
 
@@ -71,6 +74,8 @@ python -m hashdv reproduce --data data
 ```
 
 This checks the released SSCD/SIFT/shared-calibration comparisons and retrieval-aware TPR. It then recomputes Table VI for **all three datasets**, using each seed's full/removed matched predictions on flagged images L, other images U and pooled images T. It rebuilds both mAP50 and mAP50-95 and six AP values per seed, checking the released means, per-seed values and both difference-in-differences contrasts against their reference records. The NEU class-matched random-deletion comparison is checked separately from its nine detector instances. Missing predictions cause failure rather than a partial success message.
+
+This command checks the original intervention records. The steel rows of the submitted Table VI use the execution-matched full arms and are recomputed, with their intervals, by `python experiments/matched_full_arm.py` (a few minutes on CPU); `tests/test_matched_full_arm.py` checks their point estimates.
 
 The default command checks point estimates, not confidence intervals. To rerun **all three main-table 1,000-resample stratified image-bootstrap intervals and the NEU random-control intervals**:
 

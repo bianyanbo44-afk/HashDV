@@ -1,0 +1,10 @@
+benchmark,subset,drop_full_minus_leakfree
+NEU-DET,L,0.05996
+NEU-DET,U_nearR,0.02057
+NEU-DET,U_far,0.01063
+GC10-DET,L,-0.05488
+GC10-DET,U_nearR,0.01310
+GC10-DET,U_far,-0.00114
+DsPCBSD+,L,0.02683
+DsPCBSD+,U_nearR,-0.00053
+DsPCBSD+,U_far,0.00513

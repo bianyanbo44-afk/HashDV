@@ -1,0 +1,50 @@
+{
+  "endpoint": "mAP50 points",
+  "n_L": 157,
+  "n_U": 1894,
+  "point": {
+    "delta_L": 2.317757299924768,
+    "delta_T": 0.1360814371618317
+  },
+  "per_seed": {
+    "2027": {
+      "delta_L": 2.354280235648998,
+      "delta_T": 0.14622016099408164
+    },
+    "3407": {
+      "delta_L": 4.0643796580472795,
+      "delta_T": 0.2442108302055379
+    },
+    "8888": {
+      "delta_L": 0.534612006078028,
+      "delta_T": 0.017813320285875456
+    }
+  },
+  "analysis_type": "Post-review seed-aware sensitivity from saved predictions; no retraining.",
+  "stratified_image_fixed_seeds": {
+    "resamples": 1000,
+    "ci95": {
+      "delta_L": [
+        0.1816512303909327,
+        4.341719844935514
+      ],
+      "delta_T": [
+        0.008358492609706336,
+        0.283079399934415
+      ]
+    }
+  },
+  "paired_seed_and_image": {
+    "resamples": 1000,
+    "ci95": {
+      "delta_L": [
+        -0.5918973741764507,
+        5.7316215608723065
+      ],
+      "delta_T": [
+        -0.05245214817159949,
+        0.31734065592361105
+      ]
+    }
+  }
+}

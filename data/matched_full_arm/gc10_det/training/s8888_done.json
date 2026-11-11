@@ -1,0 +1,10 @@
+{
+  "seed": 8888,
+  "seconds": 2201,
+  "data": "F:\\CCFA\\deqcal\\configs\\gc10_det.yaml",
+  "workers": 1,
+  "cache": "ram",
+  "plots": false,
+  "checkpoint": "best.pt",
+  "weight_sha256": "0f1c3fccd3913c9f01cb85cbfe91ee197a1daacc0ba3c94cc1cc93a5e3beef76"
+}

@@ -1,0 +1,10 @@
+{
+  "seed": 2027,
+  "seconds": 2882,
+  "data": "F:\\CCFA\\deqcal\\configs\\neu_det.yaml",
+  "workers": 1,
+  "cache": "ram",
+  "plots": false,
+  "checkpoint": "best.pt",
+  "weight_sha256": "a82125a692dcdf1110455672b17678950a8e3c6901c3d9f41b46f65ace2c5132"
+}

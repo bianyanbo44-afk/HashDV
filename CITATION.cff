@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "Please cite the associated HashDV manuscript when using this software."
 type: software
-title: "Beyond Hash Deduplication: Hidden Matches and Benchmark Sensitivity in Industrial Defect Benchmarks"
+title: "Beyond Hash Deduplication: Auditing Hidden Overlap in Industrial Defect Benchmarks"
 version: 0.1.0
 date-released: 2026-11-11
 repository-code: "https://github.com/bianyanbo44-afk/HashDV"
