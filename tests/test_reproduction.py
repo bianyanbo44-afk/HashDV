@@ -64,11 +64,14 @@ def test_all_saved_comparison_scores_and_control_ap():
         {"L": 57, "U": 403, "T": 460},
         {"L": 157, "U": 1894, "T": 2051},
     ]
+    assert np.allclose(coverage["neu_det"]["delta_L_points"], [4.30819403, 2.53514665])
+    assert np.allclose(coverage["gc10_det"]["delta_L_points"], [-5.81407919, 1.33304005])
 
 
-def test_missing_intervention_files_fail_instead_of_reporting_success(tmp_path):
+@pytest.mark.parametrize("version", ["current", "original"])
+def test_missing_intervention_files_fail_instead_of_reporting_success(tmp_path, version):
     with pytest.raises(FileNotFoundError, match="gc10_det"):
-        load_dataset(tmp_path, "gc10_det")
+        load_dataset(tmp_path, "gc10_det", full_version=version)
 
 
 def test_new_prediction_provenance_matches_released_arrays():
@@ -105,7 +108,12 @@ def test_uninformative_cues_choose_smallest_weight_on_tie():
 
 def test_checkpoint_and_runtime_pairing_rules():
     assert training_recipe("neu_det", "random", 2027) == training_recipe("neu_det", "targeted", 2027)
-    assert training_recipe("neu_det", "full", 2027)["workers"] == 0
+    assert training_recipe("neu_det", "full", 2027) == training_recipe("neu_det", "targeted", 2027)
+    assert training_recipe("neu_det", "full", 2027, version="original")["workers"] == 0
+    for dataset in ("neu_det", "gc10_det"):
+        full = training_recipe(dataset, "full", 2027)
+        assert full == training_recipe(dataset, "targeted", 2027)
+        assert (full["workers"], full["cache"], full["plots"]) == (1, "ram", False)
     assert training_recipe("pcb_det", "full", 2027) == training_recipe("pcb_det", "targeted", 2027)
     assert training_recipe("pcb_det", "full", 2027)["val"] is False
 

@@ -16,8 +16,10 @@ def main():
     p.add_argument("--device", default="0")
     p.add_argument("--project", type=Path, default=Path("runs"))
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--version", choices=["current", "original"], default="current",
+                   help="Use the submitted execution-matched recipe or the original recorded recipe")
     a = p.parse_args()
-    recipe = training_recipe(a.benchmark, a.arm, a.seed)
+    recipe = training_recipe(a.benchmark, a.arm, a.seed, version=a.version)
     name = f"{a.benchmark}_{a.arm}_s{a.seed}"
     recipe.update(data=str(a.data_yaml.resolve()), device=a.device, project=str(a.project.resolve()), name=name)
     if a.dry_run:
@@ -29,7 +31,7 @@ def main():
     YOLO(a.weights).train(**recipe)
     output = a.project / name
     checkpoint = output / "weights" / ("last.pt" if a.benchmark == "pcb_det" else "best.pt")
-    record = {"recipe": recipe, "checkpoint": checkpoint.name,
+    record = {"version": a.version, "recipe": recipe, "checkpoint": checkpoint.name,
               "sha256": hashlib.sha256(checkpoint.read_bytes()).hexdigest()}
     (output / "done.json").write_text(json.dumps(record, indent=2), encoding="utf-8")
 

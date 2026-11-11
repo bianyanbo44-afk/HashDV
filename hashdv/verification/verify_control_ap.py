@@ -80,17 +80,24 @@ def check_close(actual, expected, pointer, atol=SCORE_ATOL):
         raise AssertionError((pointer, 'recomputed', np.asarray(actual).tolist(), 'reference', expected))
 
 
-def load_dataset(root, dataset, arms=('a', 'b')):
+def load_dataset(root, dataset, arms=('a', 'b'), *, full_version='original'):
+    if full_version not in {'current', 'original'}:
+        raise ValueError('Full-arm version must be current or original')
     directory = (root / 'random_deletion/saved_predictions' if dataset == 'neu_det'
                  else root / 'intervention_predictions' / dataset)
-    missing = [str(directory / f'{arm}_{seed}.npz') for arm in arms for seed in SEEDS
-               if not (directory / f'{arm}_{seed}.npz').is_file()]
+    paths = {
+        (arm, seed): (root / 'matched_full_arm' / dataset / f'a_matched_{seed}.npz'
+                     if full_version == 'current' and dataset != 'pcb_det' and arm == 'a'
+                     else directory / f'{arm}_{seed}.npz')
+        for arm in arms for seed in SEEDS
+    }
+    missing = [str(path) for path in paths.values() if not path.is_file()]
     if missing:
         raise FileNotFoundError('Incomplete intervention predictions: ' + ', '.join(missing))
     predictions, targets, names = {}, None, None
     for arm in arms:
         for seed in SEEDS:
-            pred, target, image_names = load_predictions(directory / f'{arm}_{seed}.npz')
+            pred, target, image_names = load_predictions(paths[(arm, seed)])
             if targets is None:
                 targets, names = target, image_names
             else:
@@ -123,7 +130,7 @@ def estimate(predictions, target, L, U):
     return mean, per_seed
 
 
-def verify_main_interventions(root, bootstrap=False):
+def verify_main_interventions(root, bootstrap=False, *, version='current'):
     steel = read_json(root / 'source_data/tables_and_text/l1c_results.json')
     steel_seeds = read_json(root / 'source_data/tables_and_text/l1c_extra.json')
     pcb = read_json(root / 'source_data/tables_and_text/l1d_results.json')
@@ -131,21 +138,40 @@ def verify_main_interventions(root, bootstrap=False):
     coverage = {}
     for dataset in ('neu_det', 'gc10_det', 'pcb_det'):
         reference = references[dataset]
-        predictions, targets, L, U = load_dataset(root, dataset)
+        matched = None
+        if version == 'current' and dataset != 'pcb_det':
+            matched = read_json(root / 'additional_analyses' / f'{dataset}_matched_full_arm.json')['matched_full']
+        predictions, targets, L, U = load_dataset(root, dataset, full_version=version)
         assert (len(L), len(U)) == (reference['n_L'], reference['n_U']), dataset
         mean, per_seed = estimate(predictions, targets, L, U)
         seed_reference = pcb['per_seed'] if dataset == 'pcb_det' else steel_seeds[dataset]
         for col, metric in enumerate(METRICS):
             for key, actual in mean.items():
-                check_close(actual[col], reference[metric][key], (dataset, metric, key))
+                expected = reference[metric][key]
+                if matched is not None:
+                    matched_metric = 'map50' if col == 0 else 'map50_95'
+                    if key.startswith('delta_'):
+                        expected = matched[key][matched_metric]
+                    else:
+                        arm, subset = key.split('_')
+                        label = 'full' if arm == 'a' else 'removed'
+                        expected = matched['accuracy'][matched_metric][label+'_'+subset]
+                check_close(actual[col], expected, (dataset, version, metric, key))
             for seed, values in per_seed.items():
-                for key, expected in seed_reference[seed][metric].items():
-                    check_close(values[key][col], expected, (dataset, seed, metric, key))
+                if matched is None:
+                    for key, expected in seed_reference[seed][metric].items():
+                        check_close(values[key][col], expected, (dataset, seed, metric, key))
+                elif col == 0:
+                    for key, expected in matched['per_seed_map50'][seed].items():
+                        key = key.replace('full_', 'a_').replace('removed_', 'b_')
+                        check_close(values[key][col], expected, (dataset, seed, metric, key))
         coverage[dataset] = {'images': {'L': len(L), 'U': len(U), 'T': len(L)+len(U)},
                              'seeds': list(SEEDS), 'endpoints': ['mAP50', 'mAP50-95'],
                              'delta_L_points': (100*mean['delta_L']).tolist(),
                              'delta_T_points': (100*mean['delta_T']).tolist()}
-        print(dataset, 'L/U/T, two AP endpoints, three paired seeds and delta_L/delta_T verified', flush=True)
+        print(dataset, version, 'L/U/T and two AP endpoints verified',
+              'delta_L =', np.round(100*mean['delta_L'], 6).tolist(),
+              'delta_T =', np.round(100*mean['delta_T'], 6).tolist(), 'points', flush=True)
         if bootstrap:
             rng = np.random.default_rng(0)
             samples = {key: [] for key in ('delta_L', 'delta_T')}
@@ -158,14 +184,18 @@ def verify_main_interventions(root, bootstrap=False):
             for key, values in samples.items():
                 interval = np.quantile(values, [.025, .975], axis=0)
                 for col, metric in enumerate(METRICS):
-                    check_close(interval[:, col], reference[metric][key+'_ci95'], (dataset, metric, key, 'CI'))
+                    expected = reference[metric][key+'_ci95']
+                    if matched is not None:
+                        matched_metric = 'map50' if col == 0 else 'map50_95'
+                        expected = matched['image_bootstrap_ci95'][key][matched_metric]
+                    check_close(interval[:, col], expected, (dataset, version, metric, key, 'CI'))
             print(dataset, '1,000-resample Table VI intervals verified', flush=True)
     return coverage
 
 
-def verify_random_control(root, bootstrap=False):
+def verify_random_control(root, bootstrap=False, *, version='current'):
     ref = read_json(root / 'additional_analyses/random_deletion_results.json')
-    predictions, target, L, U = load_dataset(root, 'neu_det', ('a', 'b', 'random'))
+    predictions, target, L, U = load_dataset(root, 'neu_det', ('a', 'b', 'random'), full_version=version)
     assert (len(L), len(U)) == (ref['n_leaked'], ref['n_other'])
 
     def contrast(li, ui, check=False):
@@ -181,18 +211,23 @@ def verify_random_control(root, bootstrap=False):
                 for col, metric in enumerate(('map50', 'map50_95')):
                     r = ref['metrics'][metric]['per_seed'][str(seed)]
                     for arm, label in [('a', 'full'), ('b', 'targeted'), ('random', 'random')]:
+                        if version == 'current' and arm == 'a':
+                            continue
                         for name in ('L', 'U'):
                             check_close(values[(arm, name)][col], r[label+'_'+name], ('random control', seed, metric, arm, name), 1e-10)
         return {key: np.mean([byseed[seed][key] for seed in SEEDS], axis=0) for key in byseed[SEEDS[0]]}
 
     point = contrast(L, U, True)
-    for key, value in point.items():
+    checked_keys = ('specificity_contrast',) if version == 'current' else tuple(point)
+    for key in checked_keys:
+        value = point[key]
         for col, metric in enumerate(('map50', 'map50_95')):
             check_close(value[col], ref['metrics'][metric]['mean'][key], ('random control', metric, key), 1e-10)
-    print('NEU class-matched random control, nine detector instances, L/U and all three contrasts verified', flush=True)
+    print('NEU', version, 'equal-size random-control contrasts verified:',
+          {key: np.round(100*point[key], 6).tolist() for key in checked_keys}, flush=True)
     if bootstrap:
         rng = np.random.default_rng(ref.get('bootstrap_rng_seed', 271027))
-        samples = {key: [] for key in point}
+        samples = {key: [] for key in checked_keys}
         for iteration in range(1000):
             result = contrast(rng.choice(L, len(L)), rng.choice(U, len(U)))
             for key in samples:
@@ -206,11 +241,12 @@ def verify_random_control(root, bootstrap=False):
         print('All 1,000-resample NEU random-control intervals verified', flush=True)
 
 
-def main(root, bootstrap=False):
+def main(root, bootstrap=False, *, version='current'):
     root = Path(root)
-    coverage = verify_main_interventions(root, bootstrap=bootstrap)
-    verify_random_control(root, bootstrap=bootstrap)
-    print('Verified Table VI for all three datasets and the NEU random-deletion control.', flush=True)
+    coverage = verify_main_interventions(root, bootstrap=bootstrap, version=version)
+    verify_random_control(root, bootstrap=bootstrap, version=version)
+    label = 'submitted execution-matched Table VI' if version == 'current' else 'original intervention records'
+    print('Verified', label, 'for all three datasets and the NEU random-deletion control.', flush=True)
     if not bootstrap:
         print('Confidence intervals not recomputed; use --bootstrap for all main-table and NEU control intervals.', flush=True)
     return coverage
@@ -220,5 +256,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('root', type=Path)
     parser.add_argument('--bootstrap', action='store_true')
+    parser.add_argument('--version', choices=['current', 'original'], default='current')
     args = parser.parse_args()
-    main(args.root, args.bootstrap)
+    main(args.root, args.bootstrap, version=args.version)

@@ -72,14 +72,17 @@ def prepare(data, benchmark, arm, seed, images, labels, output):
     return output / "data.yaml"
 
 
-def training_recipe(benchmark, arm, seed):
+def training_recipe(benchmark, arm, seed, *, version="current"):
     if benchmark not in BENCHMARKS or arm not in {"full", "targeted", "random"}:
         raise ValueError("Unknown benchmark or arm")
     if arm == "random" and benchmark != "neu_det":
         raise ValueError("Random-deletion control is NEU-DET only")
+    if version not in {"current", "original"}:
+        raise ValueError("Version must be current or original")
     pcb = benchmark == "pcb_det"
+    original_full = version == "original" and not pcb and arm == "full"
     return {"epochs": 50 if pcb else 150, "imgsz": 640, "batch": 16 if pcb else 8,
-            "workers": 0 if not pcb and arm == "full" else 1, "patience": 100 if pcb else 30,
-            "seed": seed, "deterministic": True, "amp": True, "plots": not pcb and arm == "full",
-            "cache": False if pcb or arm == "full" else "ram", "val": not pcb,
+            "workers": 0 if original_full else 1, "patience": 100 if pcb else 30,
+            "seed": seed, "deterministic": True, "amp": True, "plots": original_full,
+            "cache": False if pcb or original_full else "ram", "val": not pcb,
             "close_mosaic": 10, "optimizer": "auto"}

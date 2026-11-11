@@ -23,6 +23,8 @@ def main():
     p = sub.add_parser("reproduce", help="Verify released scores, subset AP and deletion contrasts on CPU")
     p.add_argument("--data", type=Path, default=Path("data"))
     p.add_argument("--bootstrap", action="store_true", help="Also recompute all 1,000-resample Table VI and NEU random-control intervals")
+    p.add_argument("--version", choices=["current", "original"], default="current",
+                   help="Check the submitted execution-matched results (default) or the original records")
     args = parser.parse_args()
     if args.command == "calibrate":
         from .calibration import fit_pairs
@@ -41,4 +43,4 @@ def main():
         from .verification.verify_saved_results import main as scores
         from .verification.verify_control_ap import main as control
         scores(args.data)
-        control(args.data, bootstrap=args.bootstrap)
+        control(args.data, bootstrap=args.bootstrap, version=args.version)

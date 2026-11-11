@@ -9,8 +9,8 @@ HashDV uncovers hidden overlap through **complementary copy detection, acquisiti
 - Fusion improves synthetic source-file recovery TPR at 1% non-source pair acceptance by **8.9 percentage points** over the best individual cue per benchmark, on average. The gain is reproduced with fresh synthetic copies and a second backbone.
 - With identical candidate-background calibration, mean source-file recovery TPR is **88.0% for HashDV** and **80.8% for SSCD**.
 - The frozen audit flags matches for **4.7%, 12.4%, and 7.7%** of evaluated images in NEU-DET, GC10-DET, and DsPCBSD+. Pair lists, geometric evidence, acquisition records and label sensitivities make the selected content traceable.
-- Three-seed fixed-test retraining gives adjusted local mAP50 responses of **7.1 and 2.3 points** on flagged NEU-DET and DsPCBSD+ images. Adjusted pooled responses are **0.14–0.51 points**. The paper defines their interpretation conditions and reports equal-size removal and match-evidence sensitivities.
-- GC10-DET retains an approximately **13-point flagged-subset advantage** after match removal, showing why overlap and its evaluation consequences must be measured together.
+- Execution-matched three-seed fixed-test retraining gives adjusted local mAP50 responses of **4.3 and 2.3 points** on flagged NEU-DET and DsPCBSD+ images. Adjusted pooled responses are **0.14–0.42 points**. The paper defines their interpretation conditions and reports equal-size removal, match-evidence and class-support sensitivities.
+- GC10-DET retains a **5.8-point flagged-subset advantage** after match removal when macro-averaging over the seven shared classes. Its original seven-versus-ten-class subset gap is 13.6 points. Class support, overlap and removal responses are reported together.
 
 The repository contains an installable verifier, frozen audit configurations, deterministic copy generation, split preparation, detector training, and the released scores/predictions needed to check the reported comparisons and intervention contrasts on CPU. Original dataset images and pretrained weights stay with their distributors.
 
@@ -25,8 +25,8 @@ Paths are relative to `data/` unless they start with `experiments/` or `configs/
 | Fig. 3 | `source_data/figures/fig04_roc.csv`, `fig04_tpr_at_1pct_fpr.csv`, `fig04_fusion_gain.csv`, `fig04_calibrated_gain.csv` |
 | Fig. 4 | `source_data/figures/fig05_by_severity.csv`, `fig05_alpha_curve.csv` |
 | Fig. 5 | `source_data/figures/fig06_prevalence.csv`, `fig06_best_score_survival.csv`, `fig06_adjacency.csv` |
-| Fig. 6 | `source_data/figures/fig08_slopes.csv`, `fig08_forest.csv` |
-| Fig. 7 | `source_data/figures/fig09_dose.csv`, `fig09_control.csv`, `fig09_gap_decomposition.csv` |
+| Fig. 6 | `matched_full_arm/source_data/fig08_slopes.csv`, `fig08_forest.csv` |
+| Fig. 7 | `source_data/figures/fig09_dose.csv`, `matched_full_arm/source_data/fig09_control.csv`, `fig09_gap_decomposition.csv`; class-aligned comparison in `additional_analyses/class_support_sensitivity.json` |
 | Table I | `splits/*.csv` |
 | Table II | `additional_analyses/baseline_source_data.csv`, `baseline_gain_bootstrap.json`, `matched_calibration.json`, `calibrated_gain_bootstrap.json`, `sscd_results.json`, `sscd_postprocessing.json`, `sift_results.json` |
 | Table III | `additional_analyses/end_to_end_results.json`, `source_data/tables_and_text/l1e_retrieval_recall.json` |
@@ -73,23 +73,31 @@ The `data/` directory includes all pair scores, match lists, original/corrected 
 python -m hashdv reproduce --data data
 ```
 
-This checks the released SSCD/SIFT/shared-calibration comparisons and retrieval-aware TPR. It then recomputes Table VI for **all three datasets**, using each seed's full/removed matched predictions on flagged images L, other images U and pooled images T. It rebuilds both mAP50 and mAP50-95 and six AP values per seed, checking the released means, per-seed values and both difference-in-differences contrasts against their reference records. The NEU class-matched random-deletion comparison is checked separately from its nine detector instances. Missing predictions cause failure rather than a partial success message.
+This checks the released SSCD/SIFT/shared-calibration comparisons and retrieval-aware TPR. It then recomputes the submitted execution-matched Table VI for all three datasets, using the current steel full arms in `data/matched_full_arm/`. Each seed is evaluated on flagged images L, other images U and pooled images T. Both mAP50 and mAP50-95, the six AP values per seed, the released means, available per-seed references and both adjusted response contrasts are reconstructed and checked. The NEU equal-size random-deletion contrast Gamma is checked from the targeted and random arms. Output identifies the result version and prints each dataset's local and pooled responses. Missing predictions cause failure.
 
-This command checks the original intervention records. The steel rows of the submitted Table VI use the execution-matched full arms and are recomputed, with their intervals, by `python experiments/matched_full_arm.py` (a few minutes on CPU); `tests/test_matched_full_arm.py` checks their point estimates.
+Use `python -m hashdv reproduce --data data --version original` to check the earlier intervention records with their recorded full arms. `python experiments/matched_full_arm.py` additionally reconstructs the current steel seed-aware intervals, match-evidence subgroups and neighbour analyses.
 
-The default command checks point estimates, not confidence intervals. To rerun **all three main-table 1,000-resample stratified image-bootstrap intervals and the NEU random-control intervals**:
+To also rerun all three submitted main-table 1,000-resample stratified image-bootstrap intervals and the NEU Gamma intervals, use the bootstrap option.
 
 ```bash
 python -m hashdv reproduce --data data --bootstrap
 ```
 
-Main-table intervals use RNG seed 0 independently for each dataset; the NEU random-control intervals use seed 271027. Seeds of the trained detectors stay fixed in these image bootstraps. This CPU check reproduces AP aggregation from saved ten-IoU TP indicators; it does not rerun GPU inference or independently re-match original boxes and annotations. In confidence-tie edge cases the main-table verifier allows at most 1e-6 in score units (0.0001 mAP point), substantially finer than the reported table precision. The historical script in `data/verification/` remains part of the unchanged original evidence; the CLI uses the maintained verifier in `hashdv/verification/`.
+Main-table intervals use RNG seed 0 independently for each dataset; the NEU random-control intervals use seed 271027. Seeds of the trained detectors stay fixed in these image bootstraps. AP macro-averaging uses each resample's observed target classes. The class-support analysis below reports missing-class frequencies and a conditional sensitivity. This CPU check uses saved ten-IoU TP indicators. In confidence-tie edge cases the main-table verifier allows at most 1e-6 in score units (0.0001 mAP point), substantially finer than the reported table precision. The CLI uses the maintained verifier in `hashdv/verification/`; `data/verification/` contains the original archived implementation.
+
+```bash
+python experiments/class_support_sensitivity.py
+```
+
+This publishes each subset's classes, image and box counts, the shared-class AP comparison retaining all L/U images, and a 1,000-resample mAP50 sensitivity conditional on every originally observed subset class remaining represented. Its RNG seed is 11122026, and its intervals hold the three trained pairs fixed. The protocol and results are `data/analysis_protocols/class_support_PROTOCOL.md` and `data/additional_analyses/class_support_sensitivity.json`.
 
 The added GC10-DET and DsPCBSD+ prediction files have [checkpoint and file provenance](data/intervention_predictions/provenance.json). Their recorded detector SHA-256 values were checked against the original best steel checkpoints and last official-PCB checkpoints. All original 86 evidence files remain checked by `data/SHA256.json`; subsequent evidence additions use `data/SHA256_icde2027.json`.
 
 Post-review NEU control sensitivities can be regenerated with `python experiments/intervention_revision_sensitivity.py`. This reports paired-seed and acquisition-index block sensitivities from the existing matched predictions. It creates no new training run and supplies no physical-instance labels. Its fixed analysis protocol is in `data/analysis_protocols/intervention_revision_PROTOCOL.md`.
 
 Post-review instance-label sensitivity is reproduced by `python experiments/instance_label_sensitivity.py`; subgroup deletion-response sensitivity is reproduced by `python experiments/instance_intervention_sensitivity.py`. These retain the original arrays and frozen audit sets, publish the identified non-source/flagged-pair intersections, and state the evidence basis of visual assessments rather than presenting them as independent human ground truth. Analysis records and their protocol are in `data/additional_analyses/instance_*`. Current maintained code, experiment scripts, tests and documentation are checked by the root `SHA256_code.json` in addition to the data checksums.
+
+Natural-pair relation records distinguish same-region or same-defect evidence, shared layout and unresolved identity. The AI-assisted assessment covers all 17 NEU pairs (9 same-region, 8 unresolved), 10 GC10 examples (1 same-defect, 7 shared-layout, 2 unresolved) and 9 PCB examples (2 same-defect, 6 shared-layout, 1 unresolved). Scores and existing geometry were visible during this assessment. The recorded categories accompany the full pair lists and the separate SIFT corroboration counts.
 
 `experiments/instance_contact_sheets.py` reconstructs the 17 NEU pair contact sheets from distributor-provided images; use `python experiments/instance_contact_sheets.py --help` for image-root and output options. Original benchmark pixels are not redistributed in this artifact.
 
@@ -141,7 +149,7 @@ python scripts/train_detector.py --benchmark neu_det --arm targeted --seed 2027 
 
 Remove `--dry-run` to train. Repeat for `full` and seeds `2027`, `3407`, `8888`. The NEU-DET `random` arm reads each seed's exact class-matched deletion list; prepare a separate dataset copy for each seed. GC10-DET uses `full` and `targeted`; DsPCBSD+ uses `--benchmark pcb_det` and its official split.
 
-NEU-DET/GC10-DET use up to 150 epochs and the best validation checkpoint. DsPCBSD+ uses 50 epochs, no validation during training, and `last.pt`. Original steel full-data runs used zero loading workers/no cache and `plots=True`; deletion arms use one worker/RAM caching and `plots=False`. DsPCBSD+ arms share runtime settings. The equal-size NEU-DET targeted/random comparison also shares runtime settings. These are the recorded execution settings, rather than an assertion that full/removed steel runs were identical. Recipes and checkpoint hashes are recorded with each completed run.
+NEU-DET/GC10-DET use up to 150 epochs and the best validation checkpoint. DsPCBSD+ uses 50 epochs, disabled validation during training, and `last.pt`. The submitted steel full, targeted and random recipes use one loading worker, RAM caching and disabled plots. PCB uses one worker, disabled caching and disabled plots in both arms. To reproduce the earlier recorded steel full-data configuration, add `--version original`. Recipes, result version and checkpoint hashes are recorded with each completed run.
 
 ## Repository map
 

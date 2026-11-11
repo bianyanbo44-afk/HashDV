@@ -1,0 +1,461 @@
+{
+  "analysis_date": "2026-11-12",
+  "analysis_type": "Post hoc class-support sensitivity from saved execution-matched predictions",
+  "ap_code": "hashdv/verification/verify_control_ap.py",
+  "datasets": {
+    "neu_det": {
+      "dataset": "neu_det",
+      "n_L": 17,
+      "n_U": 343,
+      "class_support": {
+        "L": {
+          "classes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "images_by_class": {
+            "0": 2,
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 4,
+            "5": 2
+          },
+          "boxes_by_class": {
+            "0": 5,
+            "1": 15,
+            "2": 8,
+            "3": 5,
+            "4": 11,
+            "5": 6
+          }
+        },
+        "U": {
+          "classes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "images_by_class": {
+            "0": 58,
+            "1": 71,
+            "2": 65,
+            "3": 57,
+            "4": 56,
+            "5": 58
+          },
+          "boxes_by_class": {
+            "0": 136,
+            "1": 224,
+            "2": 158,
+            "3": 79,
+            "4": 120,
+            "5": 116
+          }
+        }
+      },
+      "main_bootstrap_support_diagnostic": {
+        "rng_seed": 0,
+        "draw_order": "L then U",
+        "draws": 1000,
+        "draws_missing_an_L_class": 247,
+        "draws_missing_a_U_class": 0
+      },
+      "common_class_comparison": {
+        "classes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "image_selection": "All original L and U images retained; macro-AP restricted to shared classes",
+        "map50_and_map50_95_points": {
+          "a_L": [
+            83.23524396496364,
+            47.286532893498496
+          ],
+          "a_U": [
+            75.60011376702059,
+            41.70830335571478
+          ],
+          "a_T": [
+            76.09986478322988,
+            42.024919016516144
+          ],
+          "b_L": [
+            77.23931318965262,
+            44.114110609002054
+          ],
+          "b_U": [
+            73.91237702177898,
+            41.07102772582152
+          ],
+          "b_T": [
+            73.98890620356869,
+            41.07923367077983
+          ],
+          "delta_L": [
+            4.3081940300693935,
+            2.5351466546031913
+          ],
+          "delta_T": [
+            0.42322183441956635,
+            0.3084097158430591
+          ]
+        },
+        "gap_full_points": [
+          7.635130197943052,
+          5.578229537783713
+        ],
+        "gap_removed_points": [
+          3.326936167873651,
+          3.0430828831805314
+        ]
+      },
+      "class_support_conditioned_image_bootstrap": {
+        "endpoint": "mAP50 points",
+        "rng_seed": 11122026,
+        "accepted_resamples": 1000,
+        "attempted_resamples": 1367,
+        "conditioning": "Every class observed in each original subset is present in that subset's resample",
+        "trained_seeds": [
+          2027,
+          3407,
+          8888
+        ],
+        "delta_L_ci95": [
+          -2.924098371856191,
+          9.506064914215145
+        ],
+        "delta_T_ci95": [
+          -0.13162943277795203,
+          0.8962606543138568
+        ]
+      }
+    },
+    "gc10_det": {
+      "dataset": "gc10_det",
+      "n_L": 57,
+      "n_U": 403,
+      "class_support": {
+        "L": {
+          "classes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "images_by_class": {
+            "0": 1,
+            "1": 11,
+            "2": 9,
+            "3": 3,
+            "4": 12,
+            "5": 28,
+            "6": 3
+          },
+          "boxes_by_class": {
+            "0": 1,
+            "1": 11,
+            "2": 9,
+            "3": 3,
+            "4": 42,
+            "5": 28,
+            "6": 3
+          }
+        },
+        "U": {
+          "classes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "images_by_class": {
+            "0": 65,
+            "1": 92,
+            "2": 44,
+            "3": 59,
+            "4": 38,
+            "5": 118,
+            "6": 37,
+            "7": 9,
+            "8": 11,
+            "9": 28
+          },
+          "boxes_by_class": {
+            "0": 65,
+            "1": 92,
+            "2": 44,
+            "3": 68,
+            "4": 84,
+            "5": 151,
+            "6": 62,
+            "7": 17,
+            "8": 13,
+            "9": 28
+          }
+        }
+      },
+      "main_bootstrap_support_diagnostic": {
+        "rng_seed": 0,
+        "draw_order": "L then U",
+        "draws": 1000,
+        "draws_missing_an_L_class": 424,
+        "draws_missing_a_U_class": 0
+      },
+      "common_class_comparison": {
+        "classes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "image_selection": "All original L and U images retained; macro-AP restricted to shared classes",
+        "map50_and_map50_95_points": {
+          "a_L": [
+            69.73113274360955,
+            37.50042749285189
+          ],
+          "a_U": [
+            68.42970943476314,
+            36.20293888982698
+          ],
+          "a_T": [
+            70.88844145018604,
+            37.38306393832727
+          ],
+          "b_L": [
+            75.21958001265106,
+            36.05490552732575
+          ],
+          "b_U": [
+            69.46450547032065,
+            36.97453432996458
+          ],
+          "b_T": [
+            71.64074674090702,
+            37.811562381796726
+          ],
+          "delta_L": [
+            -4.4536512334839875,
+            2.217117405663736
+          ],
+          "delta_T": [
+            0.28249074483653136,
+            0.34309699666812776
+          ]
+        },
+        "gap_full_points": [
+          1.3014233088464056,
+          1.29748860302491
+        ],
+        "gap_removed_points": [
+          5.755074542330418,
+          -0.9196288026388277
+        ]
+      },
+      "class_support_conditioned_image_bootstrap": {
+        "endpoint": "mAP50 points",
+        "rng_seed": 11122026,
+        "accepted_resamples": 1000,
+        "attempted_resamples": 1822,
+        "conditioning": "Every class observed in each original subset is present in that subset's resample",
+        "trained_seeds": [
+          2027,
+          3407,
+          8888
+        ],
+        "delta_L_ci95": [
+          -10.58504429646732,
+          -1.7482961602609093
+        ],
+        "delta_T_ci95": [
+          -0.26002096246113493,
+          0.6134886838991174
+        ]
+      }
+    },
+    "pcb_det": {
+      "dataset": "pcb_det",
+      "n_L": 157,
+      "n_U": 1894,
+      "class_support": {
+        "L": {
+          "classes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "images_by_class": {
+            "0": 3,
+            "1": 27,
+            "2": 11,
+            "3": 7,
+            "4": 16,
+            "5": 61,
+            "6": 29,
+            "7": 21,
+            "8": 16
+          },
+          "boxes_by_class": {
+            "0": 6,
+            "1": 46,
+            "2": 14,
+            "3": 12,
+            "4": 21,
+            "5": 188,
+            "6": 58,
+            "7": 30,
+            "8": 16
+          }
+        },
+        "U": {
+          "classes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "images_by_class": {
+            "0": 123,
+            "1": 403,
+            "2": 234,
+            "3": 267,
+            "4": 375,
+            "5": 210,
+            "6": 250,
+            "7": 288,
+            "8": 289
+          },
+          "boxes_by_class": {
+            "0": 163,
+            "1": 883,
+            "2": 271,
+            "3": 326,
+            "4": 525,
+            "5": 420,
+            "6": 390,
+            "7": 393,
+            "8": 330
+          }
+        }
+      },
+      "main_bootstrap_support_diagnostic": {
+        "rng_seed": 0,
+        "draw_order": "L then U",
+        "draws": 1000,
+        "draws_missing_an_L_class": 47,
+        "draws_missing_a_U_class": 0
+      },
+      "common_class_comparison": {
+        "classes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "image_selection": "All original L and U images retained; macro-AP restricted to shared classes",
+        "map50_and_map50_95_points": {
+          "a_L": [
+            87.4729732018844,
+            53.26663572866962
+          ],
+          "a_U": [
+            84.88527997009766,
+            50.946317879718514
+          ],
+          "a_T": [
+            84.98704314409271,
+            50.8172122896268
+          ],
+          "b_L": [
+            84.78987997805733,
+            51.555881687693706
+          ],
+          "b_U": [
+            84.51994404619536,
+            50.55553140586494
+          ],
+          "b_T": [
+            84.4856257830286,
+            50.340200623173516
+          ],
+          "delta_L": [
+            2.317757299924768,
+            1.3199675671223488
+          ],
+          "delta_T": [
+            0.1360814371618317,
+            0.08622519259970929
+          ]
+        },
+        "gap_full_points": [
+          2.5876932317867474,
+          2.3203178489511034
+        ],
+        "gap_removed_points": [
+          0.2699359318619643,
+          1.0003502818287657
+        ]
+      },
+      "class_support_conditioned_image_bootstrap": {
+        "endpoint": "mAP50 points",
+        "rng_seed": 11122026,
+        "accepted_resamples": 1000,
+        "attempted_resamples": 1052,
+        "conditioning": "Every class observed in each original subset is present in that subset's resample",
+        "trained_seeds": [
+          2027,
+          3407,
+          8888
+        ],
+        "delta_L_ci95": [
+          0.27602438474085667,
+          4.485196157075692
+        ],
+        "delta_T_ci95": [
+          0.0032016083448070205,
+          0.2710612411782005
+        ]
+      }
+    }
+  }
+}

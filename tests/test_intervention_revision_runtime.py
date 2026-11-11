@@ -20,7 +20,7 @@ PROVENANCE = json.loads(
 )
 def test_training_recipe_matches_executed_runtime(executed):
     """Do not silently unify the historical full and deletion execution settings."""
-    recipe = training_recipe(executed["dataset"], executed["arm"], executed["seed"])
+    recipe = training_recipe(executed["dataset"], executed["arm"], executed["seed"], version="original")
     for key, value in recipe.items():
         assert value == executed[key], (executed["run_id"], key, value, executed[key])
     assert len(executed["args_sha256"]) == 64

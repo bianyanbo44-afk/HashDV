@@ -1,6 +1,7 @@
 {
   "additional_analyses/audit_timing.json": "59bd02f0bd64b2c7d15365511f6b3f0aa6ad7a83bdf5437faf29e0a3515a59ee",
   "additional_analyses/chance_flags.json": "2e9d84b79c337385c40748185da8691b1f92add5341a9b6dfc770c90d7a9ea2c",
+  "additional_analyses/class_support_sensitivity.json": "12d4539a5e74e293c1e3ee7aa7b56731646e369e627908c290278d9154b7b193",
   "additional_analyses/gc10_det_matched_full_arm.json": "9804f1c6c9bc56e5d4228c4e94e72faf0a0827fc674c6c66a1169ca91d11ee90",
   "additional_analyses/instance_intervention_sensitivity.json": "67cc784ac1d7409bbcecc8984a35bf61fbeec045bf644639dfd22e795c881061",
   "additional_analyses/instance_label_conflict_rows.csv": "5b8768f9fa62347e1e8ccf1b63a1547adfb62a1d4ca2a76f31d13d65166fe4a0",
@@ -11,6 +12,7 @@
   "additional_analyses/intervention_revision_training_provenance.json": "ffafdb7808ba901a09bfc0a543172830a0f90754babb3329b26f857bd0ab53ef",
   "additional_analyses/neu_det_matched_full_arm.json": "b96ed6669530c8b1fdbd5b13701ed6d9db80463a2782444dcd936c9daecd7135",
   "additional_analyses/pcb_seed_sensitivity.json": "68c58d9822893c2b2b268487505024c92b9312bff3a0061e8742de3bac990234",
+  "analysis_protocols/class_support_PROTOCOL.md": "dc2393f393f4aab2c5c0cf4f19332d4beae3bb9ff83893554adb42b218714bbc",
   "analysis_protocols/intervention_revision_PROTOCOL.md": "8499202cf417ab71bf24ed5f7cbd2ee1a1049774193cedc1d6df7793054c4c81",
   "intervention_predictions/gc10_det/a_2027.npz": "aecb97ff9c262424af4dcec13d5fc6dfc88b7eb757f872eb1f81032ef4511d12",
   "intervention_predictions/gc10_det/a_3407.npz": "ba0615be7d08feca33577c4e858c8ac9ce113c782b033beeb1dccf3135647304",
