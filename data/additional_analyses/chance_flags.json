@@ -1,0 +1,41 @@
+{
+ "neu_det": {
+  "evaluation_images": 360,
+  "flagged_images": 17,
+  "per_query_false_flag_rate": {
+   "fit": 0.022222222222222223,
+   "test": 0.022222222222222223
+  },
+  "expected_chance_flags_test_rate": 8.0,
+  "flagged_over_expected": 2.125,
+  "flagged_pairs": 17,
+  "pairs_exact_phash_match": 0,
+  "pairs_phash_within_5_bits": 0
+ },
+ "gc10_det": {
+  "evaluation_images": 460,
+  "flagged_images": 57,
+  "per_query_false_flag_rate": {
+   "fit": 0.010869565217391304,
+   "test": 0.01956521739130435
+  },
+  "expected_chance_flags_test_rate": 9.0,
+  "flagged_over_expected": 6.333333333333333,
+  "flagged_pairs": 73,
+  "pairs_exact_phash_match": 0,
+  "pairs_phash_within_5_bits": 1
+ },
+ "pcb_det": {
+  "evaluation_images": 2051,
+  "flagged_images": 157,
+  "per_query_false_flag_rate": {
+   "fit": 0.013888888888888888,
+   "test": 0.013888888888888888
+  },
+  "expected_chance_flags_test_rate": 28.48611111111111,
+  "flagged_over_expected": 5.511457825450999,
+  "flagged_pairs": 377,
+  "pairs_exact_phash_match": 24,
+  "pairs_phash_within_5_bits": 158
+ }
+}

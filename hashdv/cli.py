@@ -22,7 +22,7 @@ def main():
     p.add_argument("--cache-images", type=int, default=128)
     p = sub.add_parser("reproduce", help="Verify released scores, subset AP and deletion contrasts on CPU")
     p.add_argument("--data", type=Path, default=Path("data"))
-    p.add_argument("--bootstrap", action="store_true", help="Also recompute the 1,000-resample control intervals")
+    p.add_argument("--bootstrap", action="store_true", help="Also recompute all 1,000-resample Table VI and NEU random-control intervals")
     args = parser.parse_args()
     if args.command == "calibrate":
         from .calibration import fit_pairs

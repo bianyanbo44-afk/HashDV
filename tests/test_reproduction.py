@@ -10,7 +10,7 @@ import pytest
 from hashdv.calibration import fit, fit_pairs
 from hashdv.intervention import manifest, training_recipe
 from hashdv.verification.verify_saved_results import main as verify_scores
-from hashdv.verification.verify_control_ap import main as verify_ap
+from hashdv.verification.verify_control_ap import main as verify_ap, load_dataset
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -20,6 +20,31 @@ def test_original_evidence_file_hashes():
     hashes = json.loads((DATA / "SHA256.json").read_text())
     assert len(hashes) == 86
     assert all(hashlib.sha256((DATA / name).read_bytes()).hexdigest() == digest for name, digest in hashes.items())
+
+
+def test_icde2027_addition_hashes():
+    hashes = json.loads((DATA / "SHA256_icde2027.json").read_text())
+    assert hashes
+    assert all(hashlib.sha256((DATA / name).read_bytes()).hexdigest() == digest for name, digest in hashes.items())
+    original = json.loads((DATA / "SHA256.json").read_text())
+    observed = {p.relative_to(DATA).as_posix() for p in DATA.rglob("*")
+                if p.is_file() and "__pycache__" not in p.parts and p.suffix != ".pyc"}
+    assert observed == set(original) | set(hashes) | {"SHA256.json", "SHA256_icde2027.json"}
+
+
+def test_revision_code_hashes():
+    hashes = json.loads((ROOT / "SHA256_code.json").read_text())
+    assert hashes
+    assert all(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == digest
+               for name, digest in hashes.items())
+
+
+@pytest.mark.parametrize("dataset,arm", [(d, a) for d in ["gc10_det", "pcb_det"] for a in "ab"])
+def test_intervention_predictions_cover_all_seeds(dataset, arm):
+    for seed in (2027, 3407, 8888):
+        z = np.load(DATA / "intervention_predictions" / dataset / f"{arm}_{seed}.npz", allow_pickle=False)
+        assert len(z["prediction_offsets"]) == len(z["image_names"]) + 1
+        assert z["tp"].shape == (len(z["confidence"]), 10)
 
 
 @pytest.mark.parametrize("dataset", ["neu_det", "gc10_det", "pcb_det"])
@@ -32,7 +57,29 @@ def test_fit_reproduces_paper_calibration(dataset):
 
 def test_all_saved_comparison_scores_and_control_ap():
     verify_scores(DATA)
-    verify_ap(DATA)
+    coverage = verify_ap(DATA)
+    assert set(coverage) == {"neu_det", "gc10_det", "pcb_det"}
+    assert [coverage[d]["images"] for d in ("neu_det", "gc10_det", "pcb_det")] == [
+        {"L": 17, "U": 343, "T": 360},
+        {"L": 57, "U": 403, "T": 460},
+        {"L": 157, "U": 1894, "T": 2051},
+    ]
+
+
+def test_missing_intervention_files_fail_instead_of_reporting_success(tmp_path):
+    with pytest.raises(FileNotFoundError, match="gc10_det"):
+        load_dataset(tmp_path, "gc10_det")
+
+
+def test_new_prediction_provenance_matches_released_arrays():
+    records = json.loads((DATA / "intervention_predictions/provenance.json").read_text())["records"]
+    assert len(records) == 12
+    for record in records:
+        path = DATA / record["prediction_file"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == record["prediction_sha256"]
+        with np.load(path, allow_pickle=False) as z:
+            assert str(z["weight_sha256"].item()) == record["weight_sha256"]
+            assert len(z["image_names"]) == record["evaluation_images"]
 
 
 @pytest.mark.parametrize("dataset,count", [("neu_det", 1063), ("gc10_det", 1315), ("pcb_det", 7931)])

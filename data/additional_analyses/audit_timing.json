@@ -1,0 +1,80 @@
+{
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "torch": "2.12.1+cu126",
+ "batch": 8,
+ "cache_images": 128,
+ "cpu": "Intel Core i9-14900HX",
+ "model_load_seconds": {
+  "neu_det,gc10_det": 7.242758399996092,
+  "pcb_det": 7.972542700001213
+ },
+ "notes": "Released audit logic (hashdv/audit.py defaults). NEU-DET and GC10-DET ran in one process; DsPCBSD+ was rerun alone after the first attempt ran out of host memory in the closure step while another process held memory. Flagged counts can differ from data/leak_lists by near-tied candidates (GC10-DET 58 vs 57, DsPCBSD+ 158 vs 157); the frozen lists remain the sets used in the paper.",
+ "runs": [
+  {
+   "benchmark": "neu_det",
+   "n_train": 1080,
+   "n_test": 360,
+   "n_flagged": 17,
+   "n_R0": 17,
+   "n_R": 17,
+   "stage_seconds": {
+    "embed_train": 18.618000300004496,
+    "hash_train": 4.306349099999352,
+    "query_read": 5.031146099921898,
+    "retrieve": 5.784836300037568,
+    "dense_encode": 36.197394099945086,
+    "verify": 3.7158164001375553,
+    "hash_compare": 1.2081224999346887
+   },
+   "query_loop_seconds": 51.977799599997525,
+   "closure_seconds": 0.0,
+   "total_seconds": 74.90214900000137,
+   "verified_pairs": 7200,
+   "dense_encoded_train": 1822
+  },
+  {
+   "benchmark": "gc10_det",
+   "n_train": 1380,
+   "n_test": 460,
+   "n_flagged": 58,
+   "n_R0": 66,
+   "n_R": 66,
+   "stage_seconds": {
+    "embed_train": 40.50824220000504,
+    "hash_train": 29.066119600000093,
+    "query_read": 14.656387299888593,
+    "retrieve": 6.954788399983954,
+    "dense_encode": 133.37400849992264,
+    "verify": 4.398276499945496,
+    "hash_compare": 35.94407160016999
+   },
+   "query_loop_seconds": 195.6757104999997,
+   "closure_seconds": 0.0,
+   "total_seconds": 265.25007230000483,
+   "verified_pairs": 9200,
+   "dense_encoded_train": 4505
+  },
+  {
+   "benchmark": "pcb_det",
+   "n_train": 8208,
+   "n_test": 2051,
+   "n_flagged": 158,
+   "n_R0": 240,
+   "n_R": 281,
+   "stage_seconds": {
+    "embed_train": 59.947836300001654,
+    "hash_train": 12.54397450000397,
+    "query_read": 19.764326899981825,
+    "retrieve": 38.39044359998661,
+    "dense_encode": 634.7784309001145,
+    "verify": 25.396953999726975,
+    "hash_compare": 8.883399500220548
+   },
+   "query_loop_seconds": 672.0267423000041,
+   "closure_seconds": 55.457600800000364,
+   "total_seconds": 799.9761539000101,
+   "verified_pairs": 45820,
+   "dense_encoded_train": 38106
+  }
+ ]
+}

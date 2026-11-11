@@ -1,0 +1,182 @@
+{
+  "endpoint": "mAP50 points",
+  "n_L": 17,
+  "n_U": 343,
+  "seed_pairs": [
+    2027,
+    3407,
+    8888
+  ],
+  "estimands": [
+    "adjusted_selected_content_removal_response",
+    "matched_execution_specificity_contrast"
+  ],
+  "point": {
+    "delta_L": 7.1362569637730395,
+    "Gamma": 6.5093829319847085
+  },
+  "weight_sha256": {
+    "a_2027": "8a923009b729f80860c7a45d9d08806d8bca7d95b119a7319e27f700d2061ff6",
+    "a_3407": "86ec88455b15ae80314ad1668871e260fcbab65380efc187e8a665a5c1ad4c56",
+    "a_8888": "08876caa677e8ab503bc19cebc4ad55c2aba3356db20217d5628fd1362c4e5a7",
+    "b_2027": "f681040d3fd15f60a8410504ca9e1b725a0d37d57fcd7810d4215236cca0cac4",
+    "b_3407": "e156f3c036872e37f8ad481a7891cfd64df322ff38fa2863d95d51e6d3c24660",
+    "b_8888": "d44495f22dee5af68dc665ccc054584af467db3dada6715e0f30b6309850d702",
+    "random_2027": "7d5a95191bda6d57d6652ebbb9030b8d9b1e76b89e42be26f922efb9fa8ba65b",
+    "random_3407": "7e3c9608df0f6e56070bd3f0f05ecfe1ff2622e013970bb1cc77fcdaae84788b",
+    "random_8888": "2290b297a18b0293402e53977a64764b8b8c4c4a7abf2baabb0c18f7019ed8df"
+  },
+  "scope": "Saved matched TP indicators; no retraining, no new physical-instance labels.",
+  "analysis_type": "Post-review prespecified sensitivity, not the original prospective experiment.",
+  "per_seed": {
+    "2027": {
+      "delta_L": 9.322691815337858,
+      "Gamma": 13.066999923027222
+    },
+    "3407": {
+      "delta_L": 3.858708515797782,
+      "Gamma": 2.9235426969905887
+    },
+    "8888": {
+      "delta_L": 8.227370560183477,
+      "Gamma": 3.537606175936314
+    }
+  },
+  "leave_one_seed_out": {
+    "2027": {
+      "delta_L": 6.04303953799063,
+      "Gamma": 3.2305744364634514
+    },
+    "3407": {
+      "delta_L": 8.775031187760668,
+      "Gamma": 8.302303049481768
+    },
+    "8888": {
+      "delta_L": 6.59070016556782,
+      "Gamma": 7.9952713100089055
+    }
+  },
+  "seed_resampling_only": {
+    "resamples": 27,
+    "ci95": {
+      "delta_L": [
+        4.805251958748015,
+        9.085372210054409
+      ],
+      "Gamma": [
+        3.056589784095496,
+        11.002297944490852
+      ]
+    },
+    "interpretation": "Empirical support from only three observed seed/deletion pairs; not an independent significance test."
+  },
+  "stratified_image_fixed_seeds": {
+    "resamples": 1000,
+    "ci95": {
+      "delta_L": [
+        0.9199690366312159,
+        10.093818110202697
+      ],
+      "Gamma": [
+        -0.39398983734203025,
+        11.18391921652585
+      ]
+    },
+    "median": {
+      "delta_L": 5.310818120942812,
+      "Gamma": 5.560049458817906
+    }
+  },
+  "adjacency_block_sensitivity": {
+    "5": {
+      "filename_index_block_width": 5,
+      "n_blocks": 237,
+      "n_blocks_with_flagged_images": 15,
+      "block_definition": "class + floor((filename numeric index - 1)/width)",
+      "physical_acquisition_units_verified": false,
+      "fixed_seeds": {
+        "resamples": 500,
+        "ci95": {
+          "delta_L": [
+            -0.2589212562034643,
+            9.85426746136447
+          ],
+          "Gamma": [
+            -0.8111297534068057,
+            11.201352801415064
+          ]
+        },
+        "median": {
+          "delta_L": 5.003178165435568,
+          "Gamma": 5.13983334617253
+        }
+      }
+    },
+    "10": {
+      "filename_index_block_width": 10,
+      "n_blocks": 163,
+      "n_blocks_with_flagged_images": 15,
+      "block_definition": "class + floor((filename numeric index - 1)/width)",
+      "physical_acquisition_units_verified": false,
+      "fixed_seeds": {
+        "resamples": 500,
+        "ci95": {
+          "delta_L": [
+            -0.2087125630517178,
+            10.410996493564346
+          ],
+          "Gamma": [
+            -1.1683494381927866,
+            11.329631306104524
+          ]
+        },
+        "median": {
+          "delta_L": 4.946821313010947,
+          "Gamma": 5.053573285696235
+        }
+      },
+      "paired_seed_and_block": {
+        "resamples": 500,
+        "ci95": {
+          "delta_L": [
+            -4.931277191224997,
+            12.702606996858265
+          ],
+          "Gamma": [
+            -4.050913242542427,
+            13.523205380335524
+          ]
+        },
+        "median": {
+          "delta_L": 4.672953801591655,
+          "Gamma": 4.85102300527655
+        }
+      }
+    },
+    "20": {
+      "filename_index_block_width": 20,
+      "n_blocks": 90,
+      "n_blocks_with_flagged_images": 13,
+      "block_definition": "class + floor((filename numeric index - 1)/width)",
+      "physical_acquisition_units_verified": false,
+      "fixed_seeds": {
+        "resamples": 500,
+        "ci95": {
+          "delta_L": [
+            0.4617977092973307,
+            11.071979245005275
+          ],
+          "Gamma": [
+            -0.846789271114604,
+            12.518903967850301
+          ]
+        },
+        "median": {
+          "delta_L": 5.365443748462756,
+          "Gamma": 5.444651859842587
+        }
+      }
+    }
+  },
+  "seconds": 31.92
+}

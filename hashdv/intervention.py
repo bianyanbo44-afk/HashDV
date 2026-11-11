@@ -80,6 +80,6 @@ def training_recipe(benchmark, arm, seed):
     pcb = benchmark == "pcb_det"
     return {"epochs": 50 if pcb else 150, "imgsz": 640, "batch": 16 if pcb else 8,
             "workers": 0 if not pcb and arm == "full" else 1, "patience": 100 if pcb else 30,
-            "seed": seed, "deterministic": True, "amp": True, "plots": False,
+            "seed": seed, "deterministic": True, "amp": True, "plots": not pcb and arm == "full",
             "cache": False if pcb or arm == "full" else "ram", "val": not pcb,
             "close_mosaic": 10, "optimizer": "auto"}

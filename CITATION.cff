@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: "Please cite the associated HashDV manuscript when using this software."
 type: software
-title: "HashDV: Exposing hidden copies and measuring accuracy inflation in industrial defect benchmarks"
+title: "Beyond Hash Deduplication: Hidden Matches and Benchmark Sensitivity in Industrial Defect Benchmarks"
 version: 0.1.0
-date-released: 2026-10-28
+date-released: 2026-11-11
 repository-code: "https://github.com/bianyanbo44-afk/HashDV"
 license: MIT
 authors:
